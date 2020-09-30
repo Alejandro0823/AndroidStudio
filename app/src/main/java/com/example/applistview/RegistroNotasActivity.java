@@ -36,20 +36,28 @@ public class RegistroNotasActivity extends AppCompatActivity {
            public void onClick(View v) {
                String titulo = et_titulo.getText().toString();
                String descripcion = et_descripcion.getText().toString();
+               boolean validarInterfaz = validarCampos(titulo,descripcion);
 
-               model = new NotaModel(titulo,descripcion);
-               adapter.openWrite();
-               long valorinsert = adapter.insert(model);
-               adapter.close();
+               if(validarInterfaz){
 
-               if(valorinsert > 0 ){
-                   Toast.makeText(RegistroNotasActivity.this, "NOTA AGREGADA", Toast.LENGTH_LONG).show();
-                   Intent regresar = new Intent(RegistroNotasActivity.this,NotasActivity.class);
-                   regresar.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                   startActivity(regresar);
-               }else{
-                   Toast.makeText(RegistroNotasActivity.this, "NO SE PUDO AGREGAR LA NOTA", Toast.LENGTH_LONG).show();
+                   model = new NotaModel(titulo,descripcion);
+                   adapter.openWrite();
+                   long valorinsert = adapter.insert(model);
+                   adapter.close();
+
+                   if(valorinsert > 0 ){
+                       Toast.makeText(RegistroNotasActivity.this, "NOTA AGREGADA", Toast.LENGTH_LONG).show();
+                       Intent regresar = new Intent(RegistroNotasActivity.this,NotasActivity.class);
+                       regresar.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                       startActivity(regresar);
+                   }else{
+                       Toast.makeText(RegistroNotasActivity.this, "NO SE PUDO AGREGAR LA NOTA", Toast.LENGTH_LONG).show();
+                   }
+
                }
+
+
+
            }
        });
 
@@ -62,6 +70,16 @@ public class RegistroNotasActivity extends AppCompatActivity {
 
         adapter = new NotaAdapter(getApplicationContext());
         model = new NotaModel();
+
+    }
+
+    public boolean validarCampos(String titulo,String descripcion){
+        if(titulo.isEmpty() || descripcion.isEmpty()){
+            Toast.makeText(this,"por favor completa todos los campos", Toast.LENGTH_LONG).show();
+            return false;
+        }else{
+            return true;
+        }
 
     }
 }
